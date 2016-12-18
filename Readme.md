@@ -1,4 +1,4 @@
-Miniblob 1.0
+Miniblog 1.0
 
 
 
