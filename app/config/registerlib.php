@@ -1,16 +1,16 @@
 <?php
 
 return [
-//    "tracy" => [
-//        "path" => LIB_PATH . "tracy" . DS . "tracy.php",
-//        "callback" => function() {
-//            if (ENABLE_DEBUG) {
-//                \Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT,LOG_PATH);
-//            } else {
-//                \Tracy\Debugger::enable(\Tracy\Debugger::PRODUCTION, LOG_PATH);
-//            }
-//        }
-//    ],
+    "tracy" => [
+        "path" => LIB_PATH . "tracy" . DS . "tracy.php",
+        "callback" => function() {
+            if (ENABLE_DEBUG) {
+                \Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT,LOG_PATH);
+            } else {
+                \Tracy\Debugger::enable(\Tracy\Debugger::PRODUCTION, LOG_PATH);
+            }
+        }
+    ]
 //    "notorm" => [
 //        "path" => LIB_PATH . "notorm" . DS . "NotORM.php",
 //        "callback" => function() {

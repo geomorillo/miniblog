@@ -8,7 +8,7 @@
 define("DEFAULTCONTROLLER", 'Main');
 define("DEFAULTMETHOD", 'index');
 define("USE_SESSIONS", FALSE);
-define("ENABLE_DEBUG",FALSE);//TRUE = DEVELOPMENT, FALSE = PRODUCCION
+define("ENABLE_DEBUG",TRUE);//TRUE = DEVELOPMENT, FALSE = PRODUCCION
 define('ENCRYPT_KEY', "IeT5aprlRw7pImmU73T89tNyk0cOSrkA");
 define('TEMPDATAENCRYPT',FALSE);//Encrypt TempData TRUE/FALSE(for speed)
 define("DEFAULT_LANG", "es");
