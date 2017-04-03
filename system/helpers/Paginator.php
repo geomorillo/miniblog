@@ -9,9 +9,10 @@
 namespace system\helpers;
 
 /**
- * Description of Paginator
+ * Paginates a set of data using the pdo methods from Database class
  *
  * @author Daniel Navarro Ramírez
+ * @author Manuel Jhobanny Morillo
  */
 use system\http\Request;
 use system\database\Database;
@@ -65,15 +66,10 @@ class Paginator
     }
 
     /**
-     * 
-     * @param type $data array Store perPage and TableName
-     * PerPage is the first parameter and store the quantity of record to show per page
-     * TableName is the second parameter and need to receive an string with the name of the table on your database
-     * 
+     * Paginates using the Database class
+     * @param int $perPage Number of pages to show in the pagination
+     * @param PDO $data pass a pdo object
      * @return array queries and pagination
-     * 
-     * Array queries store the data from Database Model
-     * Array pagination store the HTML to paginate the Database Model records
      */
     public static function paginate($perPage,$data)
     {
@@ -127,7 +123,7 @@ class Paginator
      * 
      * 
      * @param $perPage gets the number of records to show on your table
-     * @param $data pdo object)
+     * @param $data pdo object
      * 
      * @return type object Database records
      */
