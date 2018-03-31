@@ -1,1 +1,0 @@
-<h2>Bienvenido al modulo de Facturación</h2>
