@@ -93,7 +93,7 @@ class Route
             }
         }
 
-        $pattern = "@^" . $route . "$@"; //"@^" . $route . "$@";
+        $pattern = "@^" . $route . "$@"; 
         if (preg_match($pattern, $requestUri, $matched)) {
             if ($matched[0] === $requestUri) {
                 $url = array_shift($matched);
@@ -167,7 +167,13 @@ class Route
                                             return $object;
                                         });
                             } else {
-                                $this->executeDispatch($this->controller, $this->action, $this->params);
+                                //if route found however check if exist the function on controller
+                                if (method_exists($this->controller, $this->action)) {
+                                    $this->executeDispatch($this->controller, $this->action, $this->params);
+                                } else {
+                                    $this->found = FALSE;
+                                    break;
+                                }
                             }
                             $this->found = TRUE;
                             break;

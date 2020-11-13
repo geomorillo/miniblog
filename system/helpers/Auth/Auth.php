@@ -8,6 +8,7 @@
 
 namespace system\helpers\Auth;
 
+use system\core\Encrypter;
 use system\database\Database,
     system\http\Cookie,
     system\core\Email;
@@ -349,7 +350,7 @@ class Auth
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->errormsg[] = $this->lang['register_email_invalid'];
             }
-            if (count($this->errormsg) == 0) {
+            if ($this->errormsg && count($this->errormsg) == 0) {
                 // Input is valid 
                 $query = $this->db->table(DB_PREFIX . "users")
                         ->where("username", $username)
@@ -432,7 +433,7 @@ class Auth
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->errormsg[] = $this->lang['register_email_invalid'];
             }
-            if (count($this->errormsg) == 0) {
+            if ($this->errormsg && count($this->errormsg) == 0) {
                 // Input is valid
                 $query = $this->db->table(DB_PREFIX . "users")
                         ->where("username", $username)
@@ -585,7 +586,7 @@ class Auth
             $this->errormsg[] = $this->lang['logactivity_addinfo_long'];
             return false;
         }
-        if (count($this->errormsg) == 0) {
+        if ($this->errormsg && count($this->errormsg) == 0) {
             $ip = $_SERVER['REMOTE_ADDR'];
             $date = date("Y-m-d H:i:s");
             $this->db->table(DB_PREFIX . "activitylog")->insert(["date" => $date, "username" => $username, "action" => $action, "additionalinfo" => $additionalinfo, "ip" => $ip]);
@@ -603,7 +604,7 @@ class Auth
         // this options should be on Setup.php
         $options = [
             'cost' => COST,
-            'salt' => mcrypt_create_iv(HASH_LENGTH, MCRYPT_DEV_URANDOM)
+            'salt' => Encrypter::get_random_bytes(HASH_LENGTH)
         ];
 
         return password_hash($password, PASSWORD_BCRYPT, $options);
@@ -659,7 +660,7 @@ class Auth
         } elseif ($newpass !== $verifynewpass) {
             $this->errormsg[] = $this->lang['changepass_password_nomatch'];
         }
-        if (count($this->errormsg) == 0) {
+        if ($this->errormsg && count($this->errormsg) == 0) {
             $newpass = $this->hashPass($newpass);
             $query = $this->db->table(DB_PREFIX . "users")
                     ->where("username", $username)
@@ -715,7 +716,7 @@ class Auth
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->errormsg[] = $this->lang['changeemail_email_invalid'];
         }
-        if (count($this->errormsg) == 0) {
+        if ($this->errormsg && count($this->errormsg) == 0) {
             $query = $this->db->table(DB_PREFIX . "users")
                     ->where("username", $username)
                     ->select(["email"]);
@@ -946,7 +947,7 @@ class Auth
         } elseif (strlen($password) < MIN_PASSWORD_LENGTH) {
             $this->errormsg[] = $this->lang['deleteaccount_password_short'];
         }
-        if (count($this->errormsg) == 0) {
+        if ($this->errormsg && count($this->errormsg) == 0) {
             $query = $this->db->table(DB_PREFIX . "users")
                     ->where("username", $username)
                     ->select(["password"]);

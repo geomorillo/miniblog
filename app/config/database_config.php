@@ -30,15 +30,20 @@ return [
       |
       | Here are each of the database connections setup for your application.
       | Of course, examples of configuring each database platform that is
-      | supported by database class is shown below to make development simple.
+      | supported by PHPtricks/database class is shown below to make development simple.
+      |
+      |
+      | All database work in HPtricks/database is done through the PHP PDO facilities
+      | so make sure you have the driver for your particular database of
+      | choice installed on your machine before you begin development.
       |
      */
     // MySQL 3.x/4.x/5.x
     'mysql' => [
         'driver' => 'mysql',
         'host_name' => 'localhost',
-        'db_name' => 'presto',
-        'db_user' => '',
+        'db_name' => 'miniblog',
+        'db_user' => 'root',
         'db_password' => ''
     ],
     // PostgreSQL
