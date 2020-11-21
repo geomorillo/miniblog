@@ -17,6 +17,7 @@
                     </div>
                 </div>
             </form>
+            <div><?=$error?></div>
         </div>
     </div>
 </div>

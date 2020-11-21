@@ -17,7 +17,6 @@ use system\http\Response;
 //$router->get('/','app\controllers\Tests@index');
 $router->get('/', 'app\controllers\Main@index');
 
-
 //busqueda 
 
 $router->post('search','app\controllers\Main@search');
@@ -34,8 +33,10 @@ $router->get('pagina/[:num]','app\controllers\Main@pagina');
 
 //admin area
 $router->get('admin', 'app\controllers\Admin@index', 'before');
-$router->get('login', 'app\controllers\Admin@login');
-
+$router->get('login', 'app\controllers\Main@login');
+$router->post('authenticate', 'app\controllers\Main@authenticate');
+$router->get('crearAdmin', 'app\controllers\Main@crearAdmin');
+$router->get('admin/logout',"Admin@logout");
 //MENU
 
 $router->get('admin/menu', 'app\controllers\Admin@menu');
@@ -77,7 +78,4 @@ $router->get('admin/config','app\controllers\Admin@configuracion');
 $router->post('admin/config/[:any]','app\controllers\Admin@configuracion');
 
 
-$router->get('admin/logout', function () {
-    $response = new Response();
-    $response->redirect('/');
-});
+

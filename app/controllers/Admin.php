@@ -51,18 +51,13 @@ class Admin extends Controller
     function before()
     {
         if (!$this->auth->isLogged()) {
-            //$this->response->redirect("/login");
+            $this->response->redirect("login");
         }
     }
 
-    public function index()
+    public function index(...$datos)
     {
         echo $this->view->useTemplate("admin")->render("blog/admin/dashboard", $this->data);
-    }
-
-    public function login()
-    {
-        echo "login";
     }
 
     public function menu($data = null)
@@ -459,8 +454,8 @@ class Admin extends Controller
 
     function recursosDescarga($nombre)
     {
-        $nombrereal = split('/', $nombre);
-        header("Content-disposition: attachment; filename='$nombrereal[1]'");
+        $nombrereal = explode('/', $nombre);
+        header("Content-disposition: attachment; filename=$nombrereal[1]");
         readfile(ASSET_PATH . "images" . DS . $nombre);
         exit();
     }
@@ -487,6 +482,8 @@ class Admin extends Controller
             $data['url'] = "galeria/$nombre_img";
             $this->blogmodel->insert('recursos', $data);
             $this->recursos($this->mensajeExito("Imagen subida con exito"));
+        }else{
+            echo "no hay nada redireccionar";
         }
     }
 
@@ -537,6 +534,12 @@ class Admin extends Controller
         return '<div class="alert alert-success">
                 <strong>' . $mensaje . '</strong>
                 </div>';
+    }
+    public function logout()
+    {
+        $this->auth->logout();
+        echo "logged out";
+        $this->response->redirect("/login");
     }
 
 }

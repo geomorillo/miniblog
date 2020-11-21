@@ -31,10 +31,11 @@ class Blog extends Model
 
     function allposts()
     {
-        return $this->db->table("posts")
-                        ->join('recursos', ['recursos.id', '=', 'posts.id_recurso'], 'LEFT')
+        return $this->db->table("posts p")
+                        ->join('recursos r', ['r.id', '=', 'p.id_recurso'], 'LEFT')
                         ->orderBy('postedon', 'DESC')
                         ->orderBy('byuser', 'ASC');
+                     //   ->select(["p.id as pid", "p.title", "p.byuser", "p.postedon", "p.readmore", "p.text", "r.url as url"]);
     }
 
     function select($tabla, $data)
@@ -79,13 +80,20 @@ class Blog extends Model
 
     function postInfo($id)
     {
-        return $this->db->table('posts')
-                        ->join('recursos', ['recursos.id', '=', 'posts.id_recurso'], 'LEFT')
-                        ->join('categorias', ['categorias.id', '=', 'posts.id_categoria'], 'LEFT')
-                        ->where("posts.id", $id)
-                        ->select();
+        return $this->db->table('posts p')
+                        ->join('recursos r', ['r.id', '=', 'p.id_recurso'], 'LEFT')
+                        ->join('categorias c', ['c.id', '=', 'p.id_categoria'], 'LEFT')
+                        ->where("p.id", $id)
+                        ->select(["p.id as pid", "p.title", "p.byuser", "p.postedon", "p.readmore", "p.text", "r.url as url","c.name"]);
     }
-
+    function postInfoCategoria($idCaterogia)
+    {
+        return $this->db->table('posts p')
+                        ->join('recursos r', ['r.id', '=', 'p.id_recurso'], 'LEFT')
+                        ->join('categorias c', ['c.id', '=', 'p.id_categoria'], 'LEFT')
+                        ->where("c.id", $idCaterogia)
+                        ->select(["p.id as pid", "p.title", "p.byuser", "p.postedon", "p.readmore", "p.text", "r.url as url","c.name"]);
+    }
     function modificaRegistro($tabla, $id, $data)
     {
         return $this->db->table($tabla)->where('id', $id)->update($data);
@@ -134,12 +142,12 @@ class Blog extends Model
 
     function buscarPosts($termino)
     {
-        return $this->db->table('posts')
-                        ->join('recursos', ['recursos.id', '=', 'posts.id_recurso'], 'LEFT')
-                        ->join('categorias', ['categorias.id', '=', 'posts.id_categoria'], 'LEFT')
+        return $this->db->table('posts p')
+                        ->join('recursos r', ['r.id', '=', 'p.id_recurso'], 'LEFT')
+                        ->join('categorias c', ['c.id', '=', 'p.id_categoria'], 'LEFT')
                         ->likeWhere("title", $termino)
                         ->orderBy('postedon', 'DESC')
-                        ->select();
+                        ->select(["p.id as pid", "p.title", "p.byuser", "p.postedon", "p.readmore", "p.text", "r.url as url","c.name"]);
     }
 
     public function getPostsTitle($data)

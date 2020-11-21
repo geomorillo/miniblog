@@ -18,7 +18,8 @@ use app\models\Blog;
 use system\helpers\Paginator;
 use system\http\Request;
 use system\http\Response;
-
+use system\core\Assets;
+use system\helpers\Auth\Auth;
 class Main extends Controller
 {
 
@@ -27,10 +28,11 @@ class Main extends Controller
     private $response;
     private $request;
     private $config;
-
+    private $auth;
     public function __construct()
     {
         parent::__construct();
+        $this->auth = new Auth(); 
         $this->response = new Response();
         $this->request = new Request();
         $this->blogmodel = new Blog();
@@ -45,13 +47,13 @@ class Main extends Controller
         $this->data["heading"] = $navbarInfo[0]->heading;
         $this->data["secondarytext"] = $navbarInfo[0]->secondarytext;
         if ($data) {
-            $this->data = $data;
+            $this->data = $data[0];
             $this->data["paginador"] = "";
             $this->recargaIndex();
         } else {
             $query = $this->blogmodel->allposts();
 
-            $paginador = Paginator::paginate(3, $query);
+            $paginador = Paginator::paginate(3, $query,["p.id as pid", "p.title", "p.byuser", "p.postedon", "p.readmore", "p.text", "r.url as url"]);
             if (count($paginador["queries"])) {
                 $this->data["paginador"] = $paginador["pagination"];
                 $this->data["posts"] = $this->imprimePosts($paginador["queries"]);
@@ -60,7 +62,7 @@ class Main extends Controller
                 $this->data["paginador"] = "";
             }
         }
-        \system\core\Event::trigger('test.event',[1,2]);
+        //\system\core\Event::trigger('test.event',[1,2]);
         echo $this->view->useTemplate("blog")->render("blog/index", $this->data);
     }
 
@@ -86,7 +88,7 @@ class Main extends Controller
         $postHtml = "";
         foreach ($postsData as $post) {
             $postHtml .= "<h2>
-                <a href=\"post/$post->id\">$post->title</a>
+                <a href=\"/post/$post->id\">$post->title</a>
             </h2>
             <p class=\"lead\">
                 by <a href=\"\">$post->byuser</a>
@@ -105,18 +107,14 @@ class Main extends Controller
         $postHtml = "";
         foreach ($postsData as $post) {
             $post = (array) $post;
-            $postId = $post['id'][0]; //the id i want is the first
-            if (is_array($post['url']) &&  count($post['url']) > 1) {
-                $url = $post['url'][0];
-            } else {
-                $url = $post['url'];
-            }
+            $postId = $post['pid']; //the id i want is the first
+            $url = $post["url"] ==null ? "blank.png": $post["url"]  ; 
 
             $postHtml .= "<h2>
-                <a href=\"post/$postId\">$post[title]</a>
+                <a href=\"/post/$postId\">$post[title]</a>
             </h2>
             <p class=\"lead\">
-                by <a href=\"\">$post[byuser]</a>
+                by <a href=\"/post/$postId\">$post[byuser]</a>
             </p>
             <p><span class=\"glyphicon glyphicon-time\"></span> Posted on $post[postedon]</p>
             <hr>
@@ -204,7 +202,7 @@ class Main extends Controller
 
     function categoriaSearch($id)
     {
-        $posts = $this->blogmodel->postInfo($id);
+        $posts = $this->blogmodel->postInfoCategoria($id);
         $data["posts"] = $this->imprimePosts($posts, TRUE);
         $data["heading"] = 'Categoria:';
         if (isset($posts[0])) {
@@ -241,5 +239,40 @@ class Main extends Controller
             $this->index();
         }
     }
+
+    public function login($msg="")
+    {
+        //$asset = ["login" => "css/login.css"];// login css
+       // Assets::add($asset);//add css to assets
+       $data["error"] = $msg;
+        echo $this->view->useTemplate("login")->render("main/login",$data);
+    }
+
+    public function authenticate()
+    {
+        //catch username an password inputs using the Request helper
+        $username = $this->request->getQuery('username');
+        $password = $this->request->getQuery('password');
+
+        if ($this->auth->login($username, $password)) {
+            $this->response->redirect("admin");
+        } else {
+            //echo "not authenticated some error ocurred";
+            // not authenticated you can redirect to a login view
+            $this->response->redirect("login");
+        }
+    }
+
+
+    /**
+     * Enable for creating an Admin user, dont forget to disable after 1 use
+     */
+    // function crearAdmin(){
+
+    //     echo $this->auth->directRegister("Admin", "12345", "12345", "geomorillo@yahoo.com");
+
+        
+    // }
+
 
 }

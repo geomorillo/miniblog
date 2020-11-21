@@ -1,4 +1,4 @@
-<?= $js ?>
+
 <footer id="footer">
     <div class="container-fluid">
         <div class="row">
@@ -8,5 +8,6 @@
         </div>
     </div>
 </footer>
+<?= $js ?>
 </body>
 </html>
