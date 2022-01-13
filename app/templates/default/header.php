@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PrestoMVC</title>
+    <title>MINIBLOG</title>
 <?= $css;?>
 </head>
 

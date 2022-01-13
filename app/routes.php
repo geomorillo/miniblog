@@ -77,5 +77,6 @@ $router->post('admin/recursos/subir','app\controllers\Admin@subir');
 $router->get('admin/config','app\controllers\Admin@configuracion');
 $router->post('admin/config/[:any]','app\controllers\Admin@configuracion');
 
-
+$router->get('installer',"Installer@index");
+$router->get('test',"Installer@test");
 
